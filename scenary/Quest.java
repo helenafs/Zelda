@@ -23,6 +23,8 @@ public class Quest extends PlayField {
     
     private QuestMenu menu;
     private int currentX, currentY;
+    
+    
     //characteres 
     public static final char SOL = '.';
     public static final char OBSTACLE = 'x';
@@ -85,7 +87,7 @@ public class Quest extends PlayField {
 	        int a = 0;
         //lire les fichiers
 	        for (Path path : paths) {
-	            Board b = boards[a/2][a%2];
+	            Board b = boards[a%2][a/2];
 	            a++;
 	            BufferedReader br = null;
 	            try {
@@ -126,15 +128,13 @@ public class Quest extends PlayField {
 	                }
 	            }
 	        }
-		        
-	
-        
+		         
   
     }
     
     
     public Board getCurrentBoard() {
-    	return this.boards[currentX][currentY];
+    	return this.boards[getCurrentX()][getCurrentY()];
     }
     
     public void add(Board board) {
@@ -145,13 +145,29 @@ public class Quest extends PlayField {
         
     public void update(long elapsedTime) {
         super.update(elapsedTime);
-        this.boards[currentX][currentY].update(elapsedTime);
+        this.boards[getCurrentX()][getCurrentY()].update(elapsedTime);
         this.menu.update(elapsedTime);
     }
     
     public void render(Graphics2D g) {
         super.render(g);
-        this.boards[currentX][currentY].render(g);       
+        this.boards[getCurrentX()][getCurrentY()].render(g);       
         this.menu.render(g);
     }
+
+	public int getCurrentX() {
+		return currentX;
+	}
+
+	public void setCurrentX(int currentX) {
+		this.currentX = currentX;
+	}
+
+	public int getCurrentY() {
+		return currentY;
+	}
+
+	public void setCurrentY(int currentY) {
+		this.currentY = currentY;
+	}
 }
