@@ -15,6 +15,12 @@ public class Zelda extends Game {
     private Link link;
     private Quest quest;
     private boolean menu;
+    
+    private int max_X = 16 * 42;
+	private int max_Y = 11 * 42 + 126;
+	private int min_X = 0;
+	private int min_Y = 126;
+	
     private Rock rock;
     private Enemy enemy;
     
@@ -38,8 +44,10 @@ public class Zelda extends Game {
         
     public void update(long elapsedTime) {
        
-       	int currentX = this.quest.currentX;
-    	int currentY = this.quest.currentY;
+       	
+    	int currentX = this.quest.getCurrentX();
+    	int currentY = this.quest.getCurrentY();
+    	
     
         if (this.keyPressed(KeyEvent.VK_ALT)) {
             this.link.fight();
@@ -57,14 +65,23 @@ public class Zelda extends Game {
             this.link.setSpeed(0, 0);
         }
           System.out.println("x: " + link.getX() + "y: " + link.getY());
-        if(link.getX() > 640) {
+        if(link.getX() > max_X) {
         	link.setLocation(10, link.getY());
-        	quest.currentX++;
+        	quest.setCurrentX(quest.getCurrentX() + 1);
         }
-        else if (link.getY() > 520) {
-        	link.setLocation(link.getX(), 1);
-        	quest.currentY++;
+        else if (link.getY() > max_Y) {
+        	link.setLocation(link.getX(), 136);
+        	quest.setCurrentY(quest.getCurrentY() + 1);
         } 
+        if(link.getX() < 0) {
+        	link.setLocation(max_X - 10, link.getY());
+        	quest.setCurrentX(quest.getCurrentX() - 1);
+        }
+        if(link.getY() < min_Y) {
+        	link.setLocation( link.getX(), max_Y - 10);
+        	quest.setCurrentY(quest.getCurrentY() - 1);
+        }
+        
         this.quest.update(elapsedTime);
         this.link.update(elapsedTime);
     }
