@@ -18,6 +18,8 @@ public class Quest extends PlayField {
     
     private QuestMenu menu;
     
+    private int currentX, currentY;
+    
     public Quest(Zelda game) {
         super();
         this.game = game;
@@ -247,7 +249,7 @@ public class Quest extends PlayField {
     
     
     public Board getCurrentBoard() {
-        return this.boards[0][0];
+        return this.boards[currentX][currentY];
     }
     
     public void add(Board board) {
@@ -258,13 +260,13 @@ public class Quest extends PlayField {
         
     public void update(long elapsedTime) {
         super.update(elapsedTime);
-        this.boards[0][0].update(elapsedTime);
+        this.boards[currentX][currentY].update(elapsedTime);
         this.menu.update(elapsedTime);
     }
     
     public void render(Graphics2D g) {
         super.render(g);
-        this.boards[0][0].render(g);        
+        this.boards[currentX][currentY].render(g);        
         this.menu.render(g);
     }
 }
