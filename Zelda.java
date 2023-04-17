@@ -37,6 +37,10 @@ public class Zelda extends Game {
     }
         
     public void update(long elapsedTime) {
+       
+       	int currentX = this.quest.currentX;
+    	int currentY = this.quest.currentY;
+    
         if (this.keyPressed(KeyEvent.VK_ALT)) {
             this.link.fight();
         } else if (this.keyDown(KeyEvent.VK_LEFT)) {
@@ -52,6 +56,15 @@ public class Zelda extends Game {
         } else {
             this.link.setSpeed(0, 0);
         }
+          System.out.println("x: " + link.getX() + "y: " + link.getY());
+        if(link.getX() > 640) {
+        	link.setLocation(10, link.getY());
+        	quest.currentX++;
+        }
+        else if (link.getY() > 520) {
+        	link.setLocation(link.getX(), 1);
+        	quest.currentY++;
+        } 
         this.quest.update(elapsedTime);
         this.link.update(elapsedTime);
     }
