@@ -3,8 +3,8 @@ x x x x x x x / . . x x x x x x
 x x x / . . . . . . x x x x x x
 x x / . . . . . . . x x x x x x
 x / . . . . . . . . \ x x x x x
-x . . . . O . . . . . . . . . .
-x x . . . . . . . . . . . . M M
+x . . . . . . . . . . . . . . .
+x x . . . . . . . . . . . . . .
 x x . . . . . . . . . . . . x x
 x x . . . . . . . . . . . . x x
 x x M M M M M . . M M M M M x x
