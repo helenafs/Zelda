@@ -7,6 +7,8 @@ import java.awt.event.KeyEvent;
 import zelda.scenary.Quest;
 import zelda.scenary.Rock;
 import zelda.enemies.Enemy;
+import zelda.objects.Blade;
+
 import com.golden.gamedev.Game;
 import com.golden.gamedev.GameLoader;
 
@@ -23,6 +25,7 @@ public class Zelda extends Game {
 	
     private Rock rock;
     private Enemy enemy;
+    Blade b; 
     
     public Zelda() {
         
@@ -34,6 +37,7 @@ public class Zelda extends Game {
         this.link.setBoard(this.quest.getCurrentBoard());    
         this.menu = false;
         createEnemy();
+        b = new Blade(this,Blade.Kind.WOOD); 
     }
     
     private void createEnemy() {
@@ -81,11 +85,13 @@ public class Zelda extends Game {
         	link.setLocation( link.getX(), max_Y - 10);
         	quest.setCurrentY(quest.getCurrentY() - 1);
         }
-	  link.setBoard(quest.getCurrentBoard());//mettre a jour le colision
-
+        link.setBoard(quest.getCurrentBoard());//mettre a jour le colision
         
         this.quest.update(elapsedTime);
         this.link.update(elapsedTime);
+        
+        b.setLocation(150, 100);
+        this.b.update(elapsedTime);
     }
 
     public void render(Graphics2D g) {
@@ -93,6 +99,7 @@ public class Zelda extends Game {
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         this.quest.render(g);
         this.link.render(g);
+        this.b.render(g);
     }
     
     public static void main(String[] args) {
