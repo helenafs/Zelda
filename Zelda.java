@@ -81,6 +81,8 @@ public class Zelda extends Game {
         	link.setLocation( link.getX(), max_Y - 10);
         	quest.setCurrentY(quest.getCurrentY() - 1);
         }
+	  link.setBoard(quest.getCurrentBoard());//mettre a jour le colision
+
         
         this.quest.update(elapsedTime);
         this.link.update(elapsedTime);
