@@ -4,32 +4,36 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
-
 import zelda.scenary.Quest;
 import zelda.scenary.Rock;
-
-
+import zelda.enemies.Enemy;
 import com.golden.gamedev.Game;
 import com.golden.gamedev.GameLoader;
 
 public class Zelda extends Game {
     
     private Link link;
-   
     private Quest quest;
-    
     private boolean menu;
+    private Rock rock;
+    private Enemy enemy;
     
     public Zelda() {
         
     }
-    private Rock rock;
     
     public void initResources() {
         this.quest = new Quest(this);
         this.link = new Link(this);
         this.link.setBoard(this.quest.getCurrentBoard());    
         this.menu = false;
+        createEnemy();
+    }
+    
+    private void createEnemy() {
+        this.enemy = new Enemy(100, 100, 10);
+        this.enemy.move(1, 0);
+        this.enemy.attack();
     }
         
     public void update(long elapsedTime) {
