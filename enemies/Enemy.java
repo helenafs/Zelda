@@ -2,17 +2,24 @@ package zelda.enemies;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 import com.golden.gamedev.object.AnimatedSprite;
+import com.golden.gamedev.object.CollisionManager;
+import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.SpriteGroup;
 import com.golden.gamedev.object.Timer;
+import com.golden.gamedev.object.collision.AdvanceCollisionGroup;
+import com.golden.gamedev.object.collision.CollisionShape;
 
 import zelda.Link;
 import zelda.Orientation;
 import zelda.Player;
 import zelda.Zelda;
 import zelda.scenary.Board;
+import zelda.scenary.Tile;
 
 import com.golden.gamedev.Game;
 
@@ -26,7 +33,12 @@ public class Enemy extends AnimatedSprite{
 	private Timer figth; 
 	public static final Direction DEFAULT_DIRECTION = Direction.UP;
 	
+	private Timer changeDirectionTimer;
+    private static final int CHANGE_DIRECTION_INTERVAL = 500; // in milliseconds
 	
+    private SpriteGroup objectsGroup;
+    private BoardCollisionManager boardCollisionManager;
+
 
 	public Enemy(Zelda game, int startX, int startY, int startHealth, int startDamage) {
 	    this.setLocation(startX, startY);
@@ -34,7 +46,10 @@ public class Enemy extends AnimatedSprite{
 	    damage = startDamage;
 	    this.game = game;
 	    this.direction = Enemy.DEFAULT_DIRECTION;
-	   this.initResources();
+	    this.initResources();
+	    boardCollisionManager = new BoardCollisionManager();
+	   
+	   changeDirectionTimer = new Timer(CHANGE_DIRECTION_INTERVAL);
 	   
 	}
 	
@@ -44,32 +59,79 @@ public class Enemy extends AnimatedSprite{
         // Walk north
         sprites[0] = game.getImage("res/sprites/Link/GLWN1.gif");
         sprites[1] = game.getImage("res/sprites/Link/GLWN1.gif");
-//        sprites[1] = game.getImage("enemies/ennemiup1.gif");
+////         sprites[0] = game.getImage("res/sprites/Link/GLWN1.gif");
+//        sprites[1] = game.getImage("res/sprites/Link/GLWN1.gif");
 //        // Walk south 
-//        sprites[2] = game.getImage("C:\\Users\\helen\\OneDrive\\Documentos\\MIASHS DCISS\\Zelda\\zelda\\zelda\\classes\\zelda\\enemies\\ennemidown.gif");
-//        sprites[3] = game.getImage("C:\\Users\\helen\\OneDrive\\Documentos\\MIASHS DCISS\\Zelda\\zelda\\zelda\\classes\\zelda\\enemies\\ennemidown1.gif");
+//        sprites[2] = game.getImage("res/sprites/enemies/ennemidown.gif");
+//        sprites[3] = game.getImage("res/sprites/enemies/ennemidown1.gif");
 //        // Walk west
-//        sprites[4] = game.getImage("C:\\Users\\helen\\OneDrive\\Documentos\\MIASHS DCISS\\Zelda\\zelda\\zelda\\classes\\zelda\\enemies\\ennemileft.gif");
-//        sprites[5] = game.getImage("C:\\Users\\helen\\OneDrive\\Documentos\\MIASHS DCISS\\Zelda\\zelda\\zelda\\classes\\zelda\\enemies\\ennemileft1.gif");
-//        //walk east
-//        sprites[6] = game.getImage("C:\\Users\\helen\\OneDrive\\Documentos\\MIASHS DCISS\\Zelda\\zelda\\zelda\\classes\\zelda\\enemies\\ennemiright.gif");
-//        sprites[7] = game.getImage("C:\\Users\\helen\\OneDrive\\Documentos\\MIASHS DCISS\\Zelda\\zelda\\zelda\\classes\\zelda\\enemies\\ennemiright1.gif");
+//        sprites[4] = game.getImage("res/sprites/enemies/ennemileft.gif");
+//        sprites[5] = game.getImage("res/sprites/enemies/ennemileft1.gif");
+//        // Walk east
+//        sprites[6] = game.getImage("res/sprites/enemies/ennemiright.gif");
+//        sprites[7] = game.getImage("res/sprites/enemies/ennemiright1.gif");
 
         this.setImages(sprites);
-//        this.setLocation(256, 380);
         this.setAnimationFrame(0, 0);
 
 	}
 	
-
-    
-    //abstract
-    public void update(long elapsedTime) {
-    	 super.update(elapsedTime);
-    	 
+	public void setObjectsGroup(SpriteGroup objectsGroup) {
+	    this.objectsGroup = objectsGroup;
+	}
+	
+	public void setBoard(Board board) {
+	
+		SpriteGroup enemy = new SpriteGroup("ENEMY SPRITE GROUP");
+	    enemy.add(this);
+	 	    boardCollisionManager.setCollisionGroup(enemy, board.getForeground());
     }
 
-    //abstract
+	int directionIndex = 0;
+   
+	private double previousX;
+	private double previousY;
+
+	private void undoMove() {
+	    setLocation(previousX, previousY);
+	}
+	
+    public void update(long elapsedTime) {
+    	super.update(elapsedTime);
+    	 previousX = getX();
+    	 previousY = getY();
+
+        Direction currentDirection = Direction.UP;
+        Direction[] directions = {Direction.UP, Direction.LEFT, Direction.DOWN, Direction.RIGHT};
+
+        if (changeDirectionTimer.action(elapsedTime)) {
+            // It's time to change direction
+            directionIndex++;
+            directionIndex = directionIndex % directions.length; // increment direction index
+            currentDirection = directions[directionIndex];
+            this.walk(currentDirection);
+        }
+
+        
+        
+        if (objectsGroup != null) {
+            EnemyCollisionManager manager = new EnemyCollisionManager(objectsGroup, this);
+            Sprite collision = manager.getCollision();
+            if (collision != null) {
+                // Undo the last move and try changing direction
+                undoMove();
+                directionIndex++;
+                directionIndex = directionIndex % directions.length; // increment direction index
+                currentDirection = directions[directionIndex];
+                this.walk(currentDirection);
+            }
+        }
+      // Check if the enemy is blocked by a rock tile
+        if (this.boardCollisionManager != null) 
+            this.boardCollisionManager.checkCollision();
+    
+    }
+
     public void walk(Direction direction) {
     	double randomNum = (new Random().nextDouble() * 0.2);
     	
@@ -98,8 +160,7 @@ public class Enemy extends AnimatedSprite{
 	}
 
 	
-	public void takeDamage(int damage) {
-		
+	public void takeDamage(int damage) {	
 	    health -= damage;
 	}
 
@@ -163,5 +224,65 @@ public class Enemy extends AnimatedSprite{
 	public void render(Graphics2D g) {
         super.render(g);
     }
-}
+	// Add the following method to change the enemy's direction
+    private void changeDirection() {
+        directionIndex++;
+        directionIndex = directionIndex % Direction.values().length; // increment direction index
+        direction = Direction.values()[directionIndex];
+        this.walk(direction);
+    }
+	
+	private class EnemyCollisionManager extends AdvanceCollisionGroup {
+
+	    private SpriteGroup group;
+	    private Sprite sprite;
+	    private boolean collisionDetected;
+
+	    public EnemyCollisionManager(SpriteGroup group, Sprite sprite) {
+	        this.group = group;
+	        this.sprite = sprite;
+	        this.collisionDetected = false;
+	        this.pixelPerfectCollision = false;
+	    }
+
+	    public Sprite getCollision() {
+	        collisionDetected = false;
+	        checkCollision();
+	        if (collisionDetected) {
+	            return sprite;
+	        } else {
+	            return null;
+	        }
+	    }
+
+	    @Override
+	    public void collided(Sprite s1, Sprite s2) {
+	    	Enemy.this.undoMove();
+            Enemy.this.changeDirection();
+	        CollisionShape shape1 = getCollisionShape1(s1);
+	        CollisionShape shape2 = getCollisionShape2(s2);
+	        if (shape1.intersects(shape2)) {
+	            this.revertPosition1();
+	            collisionDetected = true;
+	        }
+	    }
+	}
+	
+	public class BoardCollisionManager extends AdvanceCollisionGroup {
+
+
+
+		    public BoardCollisionManager() {
+		    
+		        this.pixelPerfectCollision = false;
+		    }
+
+		    @Override
+		    public void collided(Sprite s1, Sprite s2) {
+		        Enemy enemy = (Enemy) s1;
+		        enemy.undoMove();
+		        enemy.changeDirection();
+
+	
+	}}}
 
