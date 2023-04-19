@@ -30,7 +30,7 @@ public class Link extends AnimatedSprite {
     
     private Game game;
     
-    private Blade.Kind blade;
+    private Blade blade;
     
     private Shield.Kind shield;
     
@@ -51,6 +51,7 @@ public class Link extends AnimatedSprite {
         this.figth.setActive(false);
         this.manager = new LinkCollisionManager();
         this.initResources();
+        blade = new Blade(this.game, Blade.Kind.WOOD,4);
     }
     
     private void initResources() {
@@ -272,11 +273,7 @@ public class Link extends AnimatedSprite {
         }
     }
     
-    public Link getLink() {
-        // return the Link object
-        return this;
-    }
-    
+
     private class LinkCollisionManager extends AdvanceCollisionGroup {
         public LinkCollisionManager() {
             this.pixelPerfectCollision = false;
@@ -297,7 +294,7 @@ public class Link extends AnimatedSprite {
 
 	public int getDamage() {
 		// TODO Auto-generated method stub
-		return 0;
+		return blade.getDamage();
 	}
 
 	public Orientation getOrientation() {
