@@ -1,6 +1,5 @@
 package zelda.enemies;
 
-import zelda.LinkCollisionManager;
 
 public class EnemyLife {
 	private int currentHealth;
