@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import zelda.scenary.Quest;
 import zelda.scenary.Rock;
+import zelda.enemies.Direction;
 import zelda.enemies.Enemy;
 import zelda.objects.Blade;
 
@@ -41,8 +42,8 @@ public class Zelda extends Game {
     }
     
     private void createEnemy() {
-        this.enemy = new Enemy(this, 100, 100, 10, 4);
-        
+        this.enemy = new Enemy(this, 300, 300, 10, 4);
+        this.enemy.walk(Direction.UP);
 //        this.enemy.move(1, 0);
 //        this.enemy.attack();
     }
@@ -107,10 +108,21 @@ public class Zelda extends Game {
         this.enemy.render(g);
     }
     
+    //pour utiliser dans l'attaque de l'enemi
+    public Link getGameLink() {
+        // return the Link object
+        return this.link;
+    }
+    
     public static void main(String[] args) {
         GameLoader game = new GameLoader();
         game.setup(new Zelda(), new Dimension(672,588), false);
         game.start();
     }
+
+	public Player getLink() {
+		// TODO Auto-generated method stub
+		return null;
+	}
     
 }
