@@ -2,10 +2,13 @@ package zelda.enemies;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 import com.golden.gamedev.object.AnimatedSprite;
 import com.golden.gamedev.object.SpriteGroup;
+import com.golden.gamedev.object.Timer;
 
+import zelda.Link;
 import zelda.Orientation;
 import zelda.Player;
 import zelda.Zelda;
@@ -19,8 +22,11 @@ public class Enemy extends AnimatedSprite{
 	private int health;
 	private int damage;
 	private Direction direction;
-	private Zelda game; 
+	private Zelda game;
+	private Timer figth; 
 	public static final Direction DEFAULT_DIRECTION = Direction.UP;
+	
+	
 
 	public Enemy(Zelda game, int startX, int startY, int startHealth, int startDamage) {
 	    this.setLocation(startX, startY);
@@ -29,6 +35,7 @@ public class Enemy extends AnimatedSprite{
 	    this.game = game;
 	    this.direction = Enemy.DEFAULT_DIRECTION;
 	   this.initResources();
+	   
 	}
 	
 	//abstract
@@ -54,28 +61,45 @@ public class Enemy extends AnimatedSprite{
 
 	}
 	
-    public void setBoard(Board board) {
-        SpriteGroup link = new SpriteGroup("LINK SPRITE GROUPE");
-        link.add(this);
-        this.manager.setCollisionGroup(link, board.getForeground());
-    }
+
     
     //abstract
     public void update(long elapsedTime) {
-    	
+    	 super.update(elapsedTime);
+    	 
     }
 
     //abstract
-    public void walk(Orientation direction) {
+    public void walk(Direction direction) {
+    	double randomNum = (new Random().nextDouble() * 0.2);
     	
+    	switch (direction) {
+        case UP:
+            this.setSpeed(0, -randomNum);
+            break;
+        case DOWN:
+            this.setSpeed(0, randomNum);
+            break;
+        case LEFT:
+            this.setSpeed(-randomNum, 0);
+            break;
+        case RIGHT:
+            this.setSpeed(randomNum, 0);
+            break;
     }
+}		
+
+ 
 
 	public void attack() {
 	    // Code to handle the enemy's attack
+		int damage = this.damage; 
+		this.game.getGameLink().takeDamage(damage);
 	}
 
 	
 	public void takeDamage(int damage) {
+		
 	    health -= damage;
 	}
 
