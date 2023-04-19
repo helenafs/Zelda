@@ -1,29 +1,44 @@
-public class Enemy {
-    // Variables pour représenter l'état de l'ennemi
+package zelda.enemies;
+
+import com.golden.gamedev.object.AnimatedSprite;
+
+import zelda.Orientation;
+
+public class Enemy extends AnimatedSprite{
+    // Variables to represent the state of the enemy
     private int x;
     private int y;
     private int health;
+    private int damage;
+    private Direction direction;
+    public static final Direction DEFAULT_DIRECTION = Direction.UP;
 
-    // Constructeur pour initialiser l'état de l'ennemi
-    public Enemy(int startX, int startY, int startHealth) {
+    // Constructor to initialize the state of the enemy
+    public Enemy(int startX, int startY, int startHealth, int startDamage) {
         x = startX;
         y = startY;
         health = startHealth;
+        damage = startDamage;
+        this.direction = Enemy.DEFAULT_DIRECTION; 
     }
 
-    // Méthodes pour contrôler le comportement de l'ennemi
+    // Methods to control the behavior of the enemy
     public void move(int dx, int dy) {
         x += dx;
         y += dy;
     }
 
     public void attack() {
-        // Code pour gérer l'attaque de l'ennemi
+        // Code to handle the enemy's attack
     }
 
-    // Autres méthodes pour les autres actions de l'ennemi
+    public void takeDamage(int damage) {
+        health -= damage;
+    }
 
-    // Méthodes pour accéder aux variables de l'ennemi
+    // Other methods for other actions of the enemy
+
+    // Methods to access the variables of the enemy
     public int getX() {
         return x;
     }
@@ -35,4 +50,13 @@ public class Enemy {
     public int getHealth() {
         return health;
     }
+
+    public int getDamage() {
+        return damage;
+    }
+
+	public Object getDirection() {
+		return direction; 
+	}
 }
+
