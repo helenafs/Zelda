@@ -64,7 +64,7 @@ public class LinkCollisionManager extends AdvanceCollisionGroup {
 		                }
 		            }
 		            // Check if the attack hit the player from the correct direction
-		            if (attackFromLeft == (link.getOrientation() == Orientation.WEST)) {
+		            if (attackFromLeft == (((Link) s1).getOrientation() == Orientation.WEST)) {
 		                life -= damage;
 		                if (life <= 0) {
 		                    game.finish();
