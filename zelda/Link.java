@@ -104,12 +104,6 @@ public class Link extends AnimatedSprite {
         sprites[32] = game.getImage("res/sprites/Link/GLFMSWBW.gif");
         sprites[33] = game.getImage("res/sprites/Link/GLFW.gif");
         sprites[34] = game.getImage("res/sprites/Link/GLFWBW.gif");
-          // Fight west with magical blade and magical shield
-        sprites[35] = game.getImage("C:\\Users\\roihm\\OneDrive\\Documents\\Cours M1 Semestre 2\\Programmation 2\\zelda\\res\\sprites\\Link\\bouclierwest.gif");
-        sprites[36] = game.getImage("C:\\Users\\roihm\\OneDrive\\Documents\\Cours M1 Semestre 2\\Programmation 2\\zelda\\res\\sprites\\Link\\positionwest.gif");
-        sprites[37] = game.getImage("C:\\Users\\roihm\\OneDrive\\Documents\\Cours M1 Semestre 2\\Programmation 2\\zelda\\res\\sprites\\Link\\whitebladeouest.gif");
-
-        
         
         this.setImages(sprites);
         this.setLocation(256, 380);
@@ -120,6 +114,15 @@ public class Link extends AnimatedSprite {
         SpriteGroup link = new SpriteGroup("LINK SPRITE GROUPE");
         link.add(this);
         this.manager.setCollisionGroup(link, board.getForeground());
+    }
+    
+    //Set la classe shield 
+    public void setShield(Shield.Kind kind) {
+        this.shield = kind;
+    }
+    
+    public Shield.Kind getShield() {
+        return shield;
     }
     
     public void update(long elapsedTime) {
@@ -200,7 +203,7 @@ public class Link extends AnimatedSprite {
                     break;
                 default:
                     // do nothing
-                }
+                }	
                 this.setAnimate(true);
                 this.setHorizontalSpeed(-Link.SPEED);
                 this.setVerticalSpeed(0);
@@ -269,6 +272,11 @@ public class Link extends AnimatedSprite {
         }
     }
     
+    public Link getLink() {
+        // return the Link object
+        return this;
+    }
+    
     private class LinkCollisionManager extends AdvanceCollisionGroup {
         public LinkCollisionManager() {
             this.pixelPerfectCollision = false;
@@ -281,6 +289,21 @@ public class Link extends AnimatedSprite {
             this.revertPosition1();
         }
     }
+
+	public void takeDamage(int damage) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public int getDamage() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public Orientation getOrientation() {
+		// TODO Auto-generated method stub
+		return orientation; 
+	}
      
 }
     
