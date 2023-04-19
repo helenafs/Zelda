@@ -9,12 +9,23 @@ import zelda.scenary.Rock;
 import zelda.enemies.Direction;
 import zelda.enemies.Enemy;
 import zelda.objects.Blade;
+import zelda.objects.LinkCollisionManagerBlade;
+import zelda.objects.Shield;
+import zelda.objects.Shield.Kind;
+
+import com.golden.gamedev.object.Sprite;
+import com.golden.gamedev.object.SpriteGroup;
 
 import com.golden.gamedev.Game;
 import com.golden.gamedev.GameLoader;
 
+
+
 public class Zelda extends Game {
-    
+	
+	private LinkCollisionManagerBlade linkBladeCollision;
+	 private SpriteGroup objectsGroup;
+
     private Link link;
     private Quest quest;
     private boolean menu;
@@ -27,6 +38,7 @@ public class Zelda extends Game {
     private Rock rock;
     private Enemy enemy;
     Blade b; 
+    Shield shield; 
     
     public Zelda() {
         
@@ -34,18 +46,29 @@ public class Zelda extends Game {
     
     public void initResources() {
         this.quest = new Quest(this);
+        createEnemy();
         this.link = new Link(this);
         this.link.setBoard(this.quest.getCurrentBoard());    
         this.menu = false;
-        createEnemy();
         b = new Blade(this,Blade.Kind.WOOD,4); 
+        
+        // Initialize the objectsGroup and add objects (e.g., trees) to it
+        objectsGroup = new SpriteGroup("Objects");
+        // Add objects to the group
+     
+        objectsGroup.add(b);
+       // objectsGroup.add(shield);
+  
+    //    linkBladeCollision = new LinkCollisionManagerBlade(bladeGroup, link);
     }
     
     private void createEnemy() {
         this.enemy = new Enemy(this, 300, 300, 10, 4);
         this.enemy.walk(Direction.UP);
-//        this.enemy.move(1, 0);
-//        this.enemy.attack();
+
+        this.enemy.setObjectsGroup(objectsGroup);
+        this.enemy.setBoard(this.quest.getCurrentBoard()); // Add this line
+
     }
         
     public void update(long elapsedTime) {
@@ -96,6 +119,25 @@ public class Zelda extends Game {
         b.setLocation(255, 379);
         this.b.update(elapsedTime);
         this.enemy.update(elapsedTime);
+        
+        
+        // Update the Link object
+        link.update(elapsedTime);
+
+        // Update the Enemy object(s)
+    //    enemyGroup.update(elapsedTime);
+
+        // Update the Blade object(s)
+   //     bladeGroup.update(elapsedTime);
+
+        // Handle input for Link, e.g. movement, attacking
+    //    handleInput();
+
+        // Update collision manager for Link and Enemy
+   //     linkEnemyCollision.update(elapsedTime);
+
+        // Update collision manager for Link and Blade
+ //       linkBladeCollision.update(elapsedTime);
     }
 
     public void render(Graphics2D g) {
