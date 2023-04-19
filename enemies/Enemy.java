@@ -4,10 +4,12 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import com.golden.gamedev.object.AnimatedSprite;
+import com.golden.gamedev.object.SpriteGroup;
 
 import zelda.Orientation;
 import zelda.Player;
 import zelda.Zelda;
+import zelda.scenary.Board;
 
 import com.golden.gamedev.Game;
 
@@ -17,8 +19,9 @@ public class Enemy extends AnimatedSprite{
 	private int health;
 	private int damage;
 	private Direction direction;
-	private Zelda game;
+	private Zelda game; 
 	public static final Direction DEFAULT_DIRECTION = Direction.UP;
+
 	public Enemy(Zelda game, int startX, int startY, int startHealth, int startDamage) {
 	    this.setLocation(startX, startY);
 	    health = startHealth;
@@ -27,30 +30,8 @@ public class Enemy extends AnimatedSprite{
 	    this.direction = Enemy.DEFAULT_DIRECTION;
 	   this.initResources();
 	}
-
-//	public void move(int dx, int dy) {
-//		
-//	    x += dx;
-//	    y += dy;
-//	}
-
-	public void attack() {
-	    // Code to handle the enemy's attack
-	}
-
-	public void takeDamage(int damage) {
-	    health -= damage;
-	}
-
-	// new method to detect the player within a certain distance from the enemy
-	public boolean detectPlayer(Player player, int distance) {
-	    double playerX = player.getX();
-	    double playerY = player.getY();
-	    double deltaX = playerX - this.getX();
-	    double deltaY = playerY - this.getY();
-	    double distanceFromPlayer = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-	    return distanceFromPlayer <= distance;
-	}
+	
+	//abstract
 	private void initResources() {
         BufferedImage[] sprites = new BufferedImage[8]; 
         // Walk north
@@ -72,6 +53,42 @@ public class Enemy extends AnimatedSprite{
         this.setAnimationFrame(0, 0);
 
 	}
+	
+    public void setBoard(Board board) {
+        SpriteGroup link = new SpriteGroup("LINK SPRITE GROUPE");
+        link.add(this);
+        this.manager.setCollisionGroup(link, board.getForeground());
+    }
+    
+    //abstract
+    public void update(long elapsedTime) {
+    	
+    }
+
+    //abstract
+    public void walk(Orientation direction) {
+    	
+    }
+
+	public void attack() {
+	    // Code to handle the enemy's attack
+	}
+
+	
+	public void takeDamage(int damage) {
+	    health -= damage;
+	}
+
+	// new method to detect the player within a certain distance from the enemy
+	public boolean detectPlayer(Player player, int distance) {
+	    double playerX = player.getX();
+	    double playerY = player.getY();
+	    double deltaX = playerX - this.getX();
+	    double deltaY = playerY - this.getY();
+	    double distanceFromPlayer = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+	    return distanceFromPlayer <= distance;
+	}
+	
 	// new method to define the enemy's behavior when attacked
 	public void attacked(Player player) {
 	    // Make the enemy face the player
@@ -118,6 +135,7 @@ public class Enemy extends AnimatedSprite{
 		
 	}
 	
+	//abstract
 	public void render(Graphics2D g) {
         super.render(g);
     }
