@@ -104,6 +104,12 @@ public class Link extends AnimatedSprite {
         sprites[32] = game.getImage("res/sprites/Link/GLFMSWBW.gif");
         sprites[33] = game.getImage("res/sprites/Link/GLFW.gif");
         sprites[34] = game.getImage("res/sprites/Link/GLFWBW.gif");
+          // Fight west with magical blade and magical shield
+        sprites[35] = game.getImage("C:\\Users\\roihm\\OneDrive\\Documents\\Cours M1 Semestre 2\\Programmation 2\\zelda\\res\\sprites\\Link\\bouclierwest.gif");
+        sprites[36] = game.getImage("C:\\Users\\roihm\\OneDrive\\Documents\\Cours M1 Semestre 2\\Programmation 2\\zelda\\res\\sprites\\Link\\positionwest.gif");
+        sprites[37] = game.getImage("C:\\Users\\roihm\\OneDrive\\Documents\\Cours M1 Semestre 2\\Programmation 2\\zelda\\res\\sprites\\Link\\whitebladeouest.gif");
+
+        
         
         this.setImages(sprites);
         this.setLocation(256, 380);
