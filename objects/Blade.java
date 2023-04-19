@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.golden.gamedev.Game;
 import com.golden.gamedev.object.Sprite;
 
 import zelda.Zelda;
@@ -22,12 +23,12 @@ public class Blade extends Sprite {
     }
     
     private Kind kind;
-    private Zelda game;
+    private Game game;
     public Sprite img;
     int damage;
     
     
-    public Blade(Zelda game, Kind silver, int damage) {
+    public Blade(Game game, Kind silver, int damage) {
         this.kind = silver;
         this.game = game;
         this.damage = damage;
