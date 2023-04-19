@@ -37,13 +37,14 @@ public class Zelda extends Game {
         this.link.setBoard(this.quest.getCurrentBoard());    
         this.menu = false;
         createEnemy();
-        b = new Blade(this,Blade.Kind.WOOD); 
+        b = new Blade(this,Blade.Kind.WOOD,4); 
     }
     
     private void createEnemy() {
-        this.enemy = new Enemy(100, 100, 10);
-        this.enemy.move(1, 0);
-        this.enemy.attack();
+        this.enemy = new Enemy(this, 100, 100, 10, 4);
+        
+//        this.enemy.move(1, 0);
+//        this.enemy.attack();
     }
         
     public void update(long elapsedTime) {
@@ -85,13 +86,15 @@ public class Zelda extends Game {
         	link.setLocation( link.getX(), max_Y - 10);
         	quest.setCurrentY(quest.getCurrentY() - 1);
         }
+        
         link.setBoard(quest.getCurrentBoard());//mettre a jour le colision
         
         this.quest.update(elapsedTime);
         this.link.update(elapsedTime);
         
-        b.setLocation(150, 100);
+        b.setLocation(255, 379);
         this.b.update(elapsedTime);
+        this.enemy.update(elapsedTime);
     }
 
     public void render(Graphics2D g) {
@@ -100,6 +103,8 @@ public class Zelda extends Game {
         this.quest.render(g);
         this.link.render(g);
         this.b.render(g);
+        System.out.println(this.enemy);
+        this.enemy.render(g);
     }
     
     public static void main(String[] args) {
