@@ -60,6 +60,41 @@ public class Goblin extends AbstractEnemy {
             break;
         }
     }
+    
+    private void initResources() {
+    BufferedImage[] sprites = new BufferedImage[2];
+    sprites[0] = getGame().getImage("res/sprites/Ennemies/Goblin_1.png");
+    sprites[1] = getGame().getImage("res/sprites/Ennemies/Goblin_2.png");
+    this.setImages(sprites);
+    this.setLocation(300, 380); // mettre une autre location pas la meme que link..
+    this.setAnimationFrame(0, 0);
+}
+
+public void setBoard(Board board) {
+    SpriteGroup goblin = new SpriteGroup("GOBLIN SPRITE GROUPE");
+    goblin.add(this);
+    this.manager.setCollisionGroup(goblin, board.getForeground());
+}
+
+public void update(long elapsedTime) {
+    super.update(elapsedTime);
+
+    Orientation[] directions = new Orientation[] {Orientation.EAST, Orientation.WEST};
+    int randomDirectionIndex = (int) (Math.random() * 2);
+    this.orientation = directions[randomDirectionIndex];
+
+    if (this.orientation.equals(Orientation.WEST)) {
+        this.setX(this.getX() + 6);
+        this.setAnimationFrame(0, 0);
+    } else if (this.orientation.equals(Orientation.EAST)) {
+        this.setX(this.getX() - 6);
+        this.setAnimationFrame(1, 1);
+    }
+
+    if (this.manager != null) 
+        this.manager.checkCollision();
+}
+
 
     public void attack() {
         // Le comportement de l'ennemi Goblin lors de l'attaque :
