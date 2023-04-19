@@ -5,7 +5,11 @@ import com.golden.gamedev.object.AnimatedSprite;
 import zelda.Orientation;
 
 public class Enemy extends AnimatedSprite{
-    // Variables to represent the state of the enemy
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	// Variables to represent the state of the enemy
     private int x;
     private int y;
     private int health;
@@ -39,11 +43,11 @@ public class Enemy extends AnimatedSprite{
     // Other methods for other actions of the enemy
 
     // Methods to access the variables of the enemy
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
