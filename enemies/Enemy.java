@@ -32,7 +32,11 @@ public class Enemy extends AnimatedSprite{
 	private int damage;
 	private Direction direction;
 	private Zelda game;
-	private Timer figth; 
+	private Timer figth;
+	
+	private int attackRange;
+    private int points;
+
 	public static final Direction DEFAULT_DIRECTION = Direction.UP;
 	
 	private Timer changeDirectionTimer;
@@ -47,6 +51,8 @@ public class Enemy extends AnimatedSprite{
 
 
 	public Enemy(Zelda game, int startX, int startY, int startHealth, int startDamage) {
+		this.attackRange = 5;
+		this.points = 15; 
 	    this.setLocation(startX, startY);
 	    health = startHealth;
 	    damage = startDamage;
@@ -63,21 +69,11 @@ public class Enemy extends AnimatedSprite{
 	
 	//abstract
 	private void initResources() {
-        BufferedImage[] sprites = new BufferedImage[8]; 
-        // Walk north
-        sprites[0] = game.getImage("res/sprites/Link/GLWN1.gif");
-        sprites[1] = game.getImage("res/sprites/Link/GLWN1.gif");
-////      sprites[0] = game.getImage("res/sprites/Link/GLWN1.gif");
-//        sprites[1] = game.getImage("res/sprites/Link/GLWN1.gif");
-//        // Walk south 
-//        sprites[2] = game.getImage("res/sprites/enemies/ennemidown.gif");
-//        sprites[3] = game.getImage("res/sprites/enemies/ennemidown1.gif");
-//        // Walk west
-//        sprites[4] = game.getImage("res/sprites/enemies/ennemileft.gif");
-//        sprites[5] = game.getImage("res/sprites/enemies/ennemileft1.gif");
-//        // Walk east
-//        sprites[6] = game.getImage("res/sprites/enemies/ennemiright.gif");
-//        sprites[7] = game.getImage("res/sprites/enemies/ennemiright1.gif");
+        BufferedImage[] sprites = new BufferedImage[4]; 
+        sprites[0] = game.getImage("res/sprites/Ennemies/crab1.gif");
+        sprites[1] = game.getImage("res/sprites/Ennemies/crab2.gif");
+        sprites[2] = game.getImage("res/sprites/Ennemies/crab3.gif");
+        sprites[3] = game.getImage("res/sprites/Ennemies/crab4.gif");
 
         this.setImages(sprites);
         this.setAnimationFrame(0, 0);
@@ -155,7 +151,7 @@ public class Enemy extends AnimatedSprite{
     }
 
     public void walk(Direction direction) {
-    	double randomNum = (new Random().nextDouble() * 0.2);
+    	double randomNum = (new Random().nextDouble() * 0.15);
     	
     	switch (direction) {
         case UP:
@@ -173,18 +169,31 @@ public class Enemy extends AnimatedSprite{
     }
 }		
 
- 
+    public int getAttackRange() {
+        return attackRange;
+    }
+
+    public int getPoints() {
+        return points;
+    }
 
 	public void attack() {
 	    // Code to handle the enemy's attack
 		int damage = this.damage; 
 		this.game.getGameLink().takeDamage(damage);
-		System.out.println("Link dit: ouch!");
+		System.out.println("Link dit: ouch");
 	}
 
 	
 	public void takeDamage(int damage) {	
 	    health -= damage;
+	    this.game.playSound("res/sounds/LOZ_Kill.wav"); 
+	    if (health <= 0) {
+            setActive(false);
+            System.out.println("Tu as tué l'ennemi");
+            this.game.playSound("res/sounds/LOZ_Kill.wav"); 
+	    }
+            
 	}
 	
 	public boolean isAlive() {
@@ -242,11 +251,7 @@ public class Enemy extends AnimatedSprite{
 	    return direction;
 	}
 
-	public void takeDamage(Object damage2) {
-		// TODO Auto-generated method stub
-		
-	}
-	
+
 	//abstract
 	public void render(Graphics2D g) {
         super.render(g);
@@ -259,13 +264,6 @@ public class Enemy extends AnimatedSprite{
         this.walk(direction);
     }
     
-    public void lifedecrease() {
-		this.life = this.life - 1;
-		if(this.life == 0) {
-			this.setActive(false);// desactive le collision manager
-			System.out.println("Un ennemi a été abbatue.");
-		}
-	}
 	
 	private class EnemyCollisionManager extends AdvanceCollisionGroup {
 
