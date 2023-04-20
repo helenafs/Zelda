@@ -1,6 +1,7 @@
 package zelda.enemies;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.List;
@@ -22,6 +23,7 @@ import zelda.scenary.Board;
 import zelda.scenary.Tile;
 
 import com.golden.gamedev.Game;
+import com.golden.gamedev.object.collision.CollisionBounds;
 
 public class Enemy extends AnimatedSprite{
 
@@ -38,6 +40,10 @@ public class Enemy extends AnimatedSprite{
 	
     private SpriteGroup objectsGroup;
     private BoardCollisionManager boardCollisionManager;
+    
+    Board board; 
+    
+    protected SpriteGroup enemies_SGroup;
 
 
 	public Enemy(Zelda game, int startX, int startY, int startHealth, int startDamage) {
@@ -51,6 +57,8 @@ public class Enemy extends AnimatedSprite{
 	   
 	   changeDirectionTimer = new Timer(CHANGE_DIRECTION_INTERVAL);
 	   
+	   enemies_SGroup = new SpriteGroup("ENEMY SPRITE GROUP");
+	   
 	}
 	
 	//abstract
@@ -59,7 +67,7 @@ public class Enemy extends AnimatedSprite{
         // Walk north
         sprites[0] = game.getImage("res/sprites/Link/GLWN1.gif");
         sprites[1] = game.getImage("res/sprites/Link/GLWN1.gif");
-////         sprites[0] = game.getImage("res/sprites/Link/GLWN1.gif");
+////      sprites[0] = game.getImage("res/sprites/Link/GLWN1.gif");
 //        sprites[1] = game.getImage("res/sprites/Link/GLWN1.gif");
 //        // Walk south 
 //        sprites[2] = game.getImage("res/sprites/enemies/ennemidown.gif");
@@ -76,16 +84,30 @@ public class Enemy extends AnimatedSprite{
 
 	}
 	
+
+	
 	public void setObjectsGroup(SpriteGroup objectsGroup) {
 	    this.objectsGroup = objectsGroup;
 	}
-	
+
 	public void setBoard(Board board) {
-	
+		this.board = board; 
 		SpriteGroup enemy = new SpriteGroup("ENEMY SPRITE GROUP");
 	    enemy.add(this);
 	 	    boardCollisionManager.setCollisionGroup(enemy, board.getForeground());
     }
+	
+	// Retourne la board sur laquelle est l'enemi
+		public Board getBoard() {
+			System.out.println("Enemy sur la board "+this.board.getX()+" "+this.board.getY());
+			return this.board;
+		}
+		
+		// Retourne true si l'enemy est sur la board 
+		public boolean isOnBoard(Board board) {
+			return this.board == board;
+		}
+
 
 	int directionIndex = 0;
    
@@ -128,7 +150,7 @@ public class Enemy extends AnimatedSprite{
         }
       // Check if the enemy is blocked by a rock tile
         if (this.boardCollisionManager != null) 
-            this.boardCollisionManager.checkCollision();
+           this.boardCollisionManager.checkCollision();
     
     }
 
@@ -157,11 +179,16 @@ public class Enemy extends AnimatedSprite{
 	    // Code to handle the enemy's attack
 		int damage = this.damage; 
 		this.game.getGameLink().takeDamage(damage);
+		System.out.println("Link dit: ouch!");
 	}
 
 	
 	public void takeDamage(int damage) {	
 	    health -= damage;
+	}
+	
+	public boolean isAlive() {
+		return this.health > 0;
 	}
 
 	// new method to detect the player within a certain distance from the enemy
@@ -231,6 +258,7 @@ public class Enemy extends AnimatedSprite{
         direction = Direction.values()[directionIndex];
         this.walk(direction);
     }
+    
 	
 	private class EnemyCollisionManager extends AdvanceCollisionGroup {
 
