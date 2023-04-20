@@ -328,7 +328,9 @@ public class Link extends AnimatedSprite {
         this.game.playSound("res/sounds/LOZ_Hurt.wav"); 
         // Optionally, play a damage taken animation or sound effect here
     }
-
+public Rectangle getBounds() {
+		return new Rectangle((int) getX(), (int) getY(), getWidth(), getHeight());
+	}
 
 	public int getDamage() {
 		// TODO Auto-generated method stub
