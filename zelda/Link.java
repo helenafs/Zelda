@@ -52,6 +52,7 @@ public class Link extends AnimatedSprite {
         this.getAnimationTimer().setDelay(Link.ANIMATION_DELAY);
         this.figth = new Timer(Link.FIGHT_TIMER);
         this.figth.setActive(false);
+	this.life = 5;
         this.manager = new LinkCollisionManager();
         this.initResources();
         blade = new Blade(this.game, Blade.Kind.WOOD,4);
@@ -334,6 +335,10 @@ public class Link extends AnimatedSprite {
 	public Blade getBlade() {
 		return blade;
 	}
+	
+	public int getLifePoints() {
+    	return this.life;
+    }
 	
 	 private class LinkCollisionManager extends AdvanceCollisionGroup {
 	        public LinkCollisionManager() {
