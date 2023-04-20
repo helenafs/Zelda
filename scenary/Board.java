@@ -134,6 +134,11 @@ public class Board {
     	blades.add(blade); 
     	blade.setBoard(this);
     }
+    
+    public ArrayList<Enemy> getEnemies() {
+        return enemies;
+    } 
+    
     public void update(long elapsedTime) {
         for (int i = 0; i < Board.WIDTH; i++) {
             for (int j = 0; j < Board.HEIGHT; j++) {

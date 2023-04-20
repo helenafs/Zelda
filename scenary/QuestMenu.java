@@ -13,6 +13,9 @@ public class QuestMenu {
     
     private Zelda game;
     
+    private boolean gameFinished;
+    private Sprite gameOverImage;
+    
     public QuestMenu(Zelda game) {
         this.game = game;
         this.sprites = new SpriteGroup("");
@@ -25,7 +28,15 @@ public class QuestMenu {
         this.sprites.add(new Sprite(this.game.getImage("res/sprites/X.GIF"), 250, 60));
         this.sprites.add(new Sprite(this.game.getImage("res/sprites/PIECE.GIF"), 230, 30));
         this.sprites.add(new Sprite(this.game.getImage("res/sprites/X.GIF"), 250, 30));
+        
+        this.gameOverImage = new Sprite(this.game.getImage("res/sprites/gameover.gif"), 320, 240); // replace with your image path and desired x, y positions
+        this.sprites.add(gameOverImage);
     }
+    
+    public void setGameFinished(boolean gameFinished) {
+        this.gameFinished = gameFinished;
+    }
+    
     
     public void move(long elapsedTime, boolean flag) {
         Sprite[] s = this.sprites.getSprites();
@@ -38,22 +49,22 @@ public class QuestMenu {
         
     }
     
-      public void pointsDeVie(int posX, int posY) {
-    	int x=posX;
-    	int y=posY;
-    	
-    	int Linklife = ((Link) this.game.getLink()).getLifePoints();
-    	
-    	for (int i=0;i<Linklife;i++) {
-    		this.sprites.add(new Sprite(this.game.getImage("res/sprites/Objects/OHC.gif"), x, y));
-    		x=x-17;
-    	}
-    
     public void update(long elapsedTime) {
         this.sprites.update(elapsedTime);
     }
     
     public void render(Graphics2D g) {
-        this.sprites.render(g);
+        // Render all the sprites except the game over image
+        for (Sprite sprite : this.sprites.getSprites()) {
+            if (sprite != null && sprite != gameOverImage) {
+                sprite.render(g);
+            }
+        }
+        
+        // Render the game over image if the game is finished
+        if (gameFinished) {
+            gameOverImage.render(g);
+        }
     }
 }
+
