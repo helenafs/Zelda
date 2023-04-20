@@ -29,7 +29,7 @@ public class QuestMenu {
         this.sprites.add(new Sprite(this.game.getImage("res/sprites/PIECE.GIF"), 230, 30));
         this.sprites.add(new Sprite(this.game.getImage("res/sprites/X.GIF"), 250, 30));
         
-        this.gameOverImage = new Sprite(this.game.getImage("res/sprites/gameover.gif"), 320, 240); // replace with your image path and desired x, y positions
+        this.gameOverImage = new Sprite(this.game.getImage("res/sprites/gameover.gif"), 320, 240); 
         this.sprites.add(gameOverImage);
     }
     
