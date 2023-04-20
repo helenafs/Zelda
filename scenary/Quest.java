@@ -33,6 +33,7 @@ public class Quest extends PlayField {
     
     private AbstractTile[][] floorTiles;
     
+
     
     //characteres 
     public static final char SOL = '.';
@@ -44,6 +45,12 @@ public class Quest extends PlayField {
     public static final char B2 = 'S';
     public static final char B3 = 'A';
     public static final char B4 = 'N';
+    
+    public static final char LAKEUN = '1';
+    public static final char LAKEDEUX = '2';
+    public static final char LAKETROIS = '3';
+    public static final char LAKEQUATRE = '4'; 
+    
     
 
     ArrayList<Sprite>[][] objets;
@@ -60,6 +67,7 @@ public class Quest extends PlayField {
         }
         this.initRessources();
         this.floorTiles = new AbstractTile[2][2]; 
+        
     }
     
   
@@ -98,8 +106,7 @@ public class Quest extends PlayField {
 	        this.add(b01);
 	        this.add(b11);
 	        
-	        b10.setEnemyOnBoard(this.game.enemy, 370, 420);
-	   //     b00.setBladeOnBoard(this.game.b, 255, 379);
+	        b10.setEnemyOnBoard(370, 420);
         
 	        int a = 0;
 	        
@@ -135,7 +142,7 @@ public class Quest extends PlayField {
 	                        // Lire les blade
 	                    	AbstractTile current = new Floor(this.game, Floor.Color.SAND);
 	                    	b.add(current);
-	                    	Sprite sp = new zelda.objects.Blade(this.game, Blade.Kind.WOOD, 4);
+	                    	Sprite sp = new Blade(this.game, Blade.Kind.WOOD, 4);
 	                    	sp.setLocation(current.getX(), current.getY());
 	                    	objets[a%2][a/2].add(sp);
 	                    } 
@@ -143,7 +150,7 @@ public class Quest extends PlayField {
 	                        // Lire les blade
 	                    	AbstractTile current = new Floor(this.game, Floor.Color.SAND);
 	                    	b.add(current);
-	                    	Sprite sp = new zelda.objects.Blade(this.game, Blade.Kind.SILVER, 4);
+	                    	Sprite sp = new Blade(this.game, Blade.Kind.SILVER, 4);
 	                    	sp.setLocation(current.getX(), current.getY());
 	                    	objets[a%2][a/2].add(sp);
 	                    } 
@@ -151,7 +158,7 @@ public class Quest extends PlayField {
 	                        // Lire les blade
 	                    	AbstractTile current = new Floor(this.game, Floor.Color.SAND);
 	                    	b.add(current);
-	                    	Sprite sp = new zelda.objects.Blade(this.game, Blade.Kind.MAGICAL, 4);
+	                    	Sprite sp = new Blade(this.game, Blade.Kind.MAGICAL, 4);
 	                    	sp.setLocation(current.getX(), current.getY());
 	                    	objets[a%2][a/2].add(sp);
 	                    } 
@@ -159,10 +166,19 @@ public class Quest extends PlayField {
 	                        // Lire les blade
 	                    	AbstractTile current = new Floor(this.game, Floor.Color.SAND);
 	                    	b.add(current);
-	                    	Sprite sp = new zelda.objects.Blade(this.game, Blade.Kind.NONE, 4);
+	                    	Sprite sp = new Blade(this.game, Blade.Kind.NONE, 4);
 	                    	sp.setLocation(current.getX(), current.getY());
 	                    	objets[a%2][a/2].add(sp);
-	                    } 
+	                    }  else if (c == LAKEUN) {
+	                    	 b.add(new Lake(this.game, Lake.Wave.GREEN_NORTH)); 
+	              	      }else if (c == LAKEDEUX) {
+	              	    	 b.add(new Lake(this.game, Lake.Wave.GREEN_CENTER));
+	    
+	                    }else if (c == LAKETROIS) {
+	                    	 b.add(new Lake(this.game, Lake.Wave.GREEN_SOUTH));
+	           		 	}else if (c == LAKEQUATRE) {
+	           		 		b.add(new Lake(this.game, Lake.Wave.GREEN));
+	                    }
 	                }
 	            } catch (IOException e) {
 	                e.printStackTrace();

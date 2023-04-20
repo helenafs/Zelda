@@ -1,69 +1,58 @@
 package zelda.scenary;
 
-import java.awt.Point;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import com.golden.gamedev.object.AnimatedSprite;
 import com.golden.gamedev.object.Sprite;
 
-import zelda.Link;
+
 import zelda.Zelda;
+import zelda.scenary.Floor.Color;
+
 
 public class Lake extends AbstractTile {
-    private boolean isPlayerNearby = false;
-    private Timer noiseTimer;
-    private Sprite lakeSprite;
-    private AnimatedSprite lakeRipples;
-    private AnimatedSprite lakeGreenRipples;
-
-    public Lake(Zelda game, int x, int y) {
-        super(game, x, y, 42, 42);
-
-        lakeSprite = new Sprite(game.getImage("res/sprites/scenery/BGDCSwhite.gif"));
-        lakeRipples = new AnimatedSprite(game.getImage("res/sprites/scenery/BGDCSwhite_dot.gif"), 10, 10);
-        lakeGreenRipples = new AnimatedSprite(game.getImage("res/sprites/scenery/BGDCSgreen_dot.gif"), 10, 10);
-
-        this.add(lakeSprite);
-        this.add(lakeRipples);
-        this.add(lakeGreenRipples);
-
-        noiseTimer = new Timer();
-        noiseTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (isPlayerNearby) {
-                    game.playSound("res/sounds/lake_noise.wav");
-                }
-            }
-        }, 0, 5000);
+    public enum Wave {
+        GREEN_NORTH,
+        GREEN_CENTER,
+        GREEN_SOUTH,
+        GREEN
+        
     }
+    private Wave color;
 
-    @Override
-    public void update(long elapsedTime) {
-        super.update(elapsedTime);
-        if (isPlayerNearby) {
-            lakeSprite.setImage(game.getImage("res/sprites/scenery/BGDCSgreen.gif"));
-            lakeRipples.setActive(false);
-            lakeGreenRipples.setActive(true);
-        } else {
-            lakeSprite.setImage(game.getImage("res/sprites/scenery/BGDCSwhite.gif"));
-            lakeRipples.setActive(true);
-            lakeGreenRipples.setActive(false);
+    public Lake(Zelda game, Wave wave) {
+        super(game, 1, 1, 42, 42);
+        this.color = wave;
+        switch(wave) {
+        case  GREEN_NORTH:
+        	this.add("res/sprites/scenary/BGGNWS.gif", 1);
+        	break;//1
+        case GREEN_CENTER:
+        	this.add("res/sprites/scenary/BGGWS.gif", 1);//2
+        	break; 
+        case GREEN_SOUTH: 
+        	this.add("res/sprites/scenary/BGGSWS.gif", 1);//3
+        	break; 
+        case GREEN:
+            this.add("res/sprites/scenary/BGGCS.gif", 1); //4          
+            break;
+     
         }
     }
 
-    public void collided(Sprite sprite) {
-        if (sprite instanceof Link) {
-            isPlayerNearby = true;
-        }
-    }
+  
+//    public void update(long elapsedTime) {
+//    	super.update(elapsedTime);
+//        switch(color) {
+//            case GREEN:
+//                break;
+//            case WHITE:
+//                // Remove the old sprite
+//                this.getGroup().remove(this.getSprite(0));
+//                // Add the new sprite
+//                this.add(new Sprite(this.game.getImage("res/sprites/scenery/BGGNES.gif")), -1);
+//                color = Wave.GREEN;
+//                break;
+//        }
+//    }
 
-    public Point getTilePosition() {
-        return new Point((int) (x / 42), (int) (y / 42));
+  //  public Point getTilePosition() {
+    //    return new Point((int) (x / 42), (int) (y / 42));
     }
-
-    public void finish() {
-        noiseTimer.cancel();
-    }
-}
