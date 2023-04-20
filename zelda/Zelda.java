@@ -77,7 +77,9 @@ public class Zelda extends Game {
     	int currentX = this.quest.getCurrentX();
     	int currentY = this.quest.getCurrentY();
     	
-    
+    	if (this.keyPressed(KeyEvent.VK_Q)) {
+            this.link.changer();
+	    
         if (this.keyPressed(KeyEvent.VK_ALT)) {
             this.link.fight();
         } else if (this.keyDown(KeyEvent.VK_LEFT)) {
