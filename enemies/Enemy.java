@@ -31,7 +31,7 @@ public class Enemy extends AnimatedSprite{
 	private int health;
 	private int damage;
 	private Direction direction;
-	private Zelda game;
+	public Zelda game;
 	private Timer figth;
 	
 	private int attackRange;
@@ -90,7 +90,7 @@ public class Enemy extends AnimatedSprite{
 		this.board = board; 
 		SpriteGroup enemy = new SpriteGroup("ENEMY SPRITE GROUP");
 	    enemy.add(this);
-	 	    boardCollisionManager.setCollisionGroup(enemy, board.getForeground());
+	 	boardCollisionManager.setCollisionGroup(enemy, board.getForeground());
     }
 	
 	// Retourne la board sur laquelle est l'enemi
