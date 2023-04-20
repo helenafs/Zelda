@@ -301,6 +301,8 @@ public class Link extends AnimatedSprite {
 		// TODO Auto-generated method stub
 		return orientation; 
 	}
-     
+     public Blade getBlade() {
+		return blade;
+	}
 }
     
