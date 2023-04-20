@@ -38,6 +38,17 @@ public class QuestMenu {
         
     }
     
+      public void pointsDeVie(int posX, int posY) {
+    	int x=posX;
+    	int y=posY;
+    	
+    	int Linklife = ((Link) this.game.getLink()).getLifePoints();
+    	
+    	for (int i=0;i<Linklife;i++) {
+    		this.sprites.add(new Sprite(this.game.getImage("res/sprites/Objects/OHC.gif"), x, y));
+    		x=x-17;
+    	}
+    
     public void update(long elapsedTime) {
         this.sprites.update(elapsedTime);
     }
