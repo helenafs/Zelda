@@ -8,10 +8,12 @@ import javax.imageio.ImageIO;
 
 import com.golden.gamedev.Game;
 import com.golden.gamedev.object.Sprite;
+import com.golden.gamedev.object.SpriteGroup;
 
 import zelda.Zelda;
 import zelda.scenary.AbstractTile;
 import zelda.scenary.Board;
+import zelda.Orientation;
 
 public class Blade extends Sprite {
     
@@ -27,13 +29,13 @@ public class Blade extends Sprite {
     public Sprite img;
     int damage;
     
+    Board board; 
     
     public Blade(Game game, Kind silver, int damage) {
         this.kind = silver;
         this.game = game;
         this.damage = damage;
-        
-        
+      
         // Initialise l'image en fonction du type d'arme
     
         switch (kind) {
@@ -67,17 +69,47 @@ public class Blade extends Sprite {
      }
     
     
-
+    public void updateImage(Orientation orientation) {
+        switch (kind) {
+            case WOOD:
+                switch (orientation) {
+                    case NORTH:
+                        setImage(game.getImage("res/sprites/Objects/OWBN.gif"));
+                        break;
+                    case SOUTH:
+                        setImage(game.getImage("res/sprites/Objects/OWBS.gif"));
+                        break;
+                    case EAST:
+                        setImage(game.getImage("res/sprites/Objects/OWBE.gif"));
+                        break;
+                    case WEST:
+                        setImage(game.getImage("res/sprites/Objects/OWBW.gif"));
+                        break;
+                }
+                break;
+            case SILVER:
+                // Similar to the WOOD case, update images based on orientation
+                break;
+            case MAGICAL:
+                // Similar to the WOOD case, update images based on orientation
+                break;
+            default:
+                // Similar to the WOOD case, update images based on orientation
+                break;
+        }
+    }
 	
-
-
-
 	public Kind getKind() {
         return kind;
     }
     
     public int getDamage() {
         return damage;
+    }
+    
+    public void setBoard(Board board) {
+        SpriteGroup blade = new SpriteGroup("BLADE SPRITE GROUPE");
+        blade.add(this);   
     }
 
 
