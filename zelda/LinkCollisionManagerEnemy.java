@@ -44,27 +44,31 @@ public class LinkCollisionManagerEnemy extends AdvanceCollisionGroup {
     }
 		
 		public boolean linkattacked(Link link, Enemy enemy) {
-		    if (link.getOrientation() == Orientation.NORTH && link.getY() - enemy.getY() <= link.getAttackRange()) {
-		        // damage the enemy and update the score
-		        enemy.takeDamage(link.getDamage());
-		        link.incrementScore(enemy.getPoints());
-		        System.out.println("link a attaqué");
-		        return true;
-		    } else if (link.getOrientation() == Orientation.SOUTH && enemy.getY() - link.getY() <= link.getAttackRange()) {
-		        enemy.takeDamage(link.getDamage());
-		        link.incrementScore(enemy.getPoints());
-		        System.out.println("link a attaqué");
-		        return true;
-		    } else if (link.getOrientation() == Orientation.WEST && link.getX() - enemy.getX() <= link.getAttackRange()) {
-		        enemy.takeDamage(link.getDamage());
-		        link.incrementScore(enemy.getPoints());
-		        System.out.println("link a attaqué");
-		        return true;
-		    } else if (link.getOrientation() == Orientation.EAST && enemy.getX() - link.getX() <= link.getAttackRange()) {
-		        enemy.takeDamage(link.getDamage());
-		        link.incrementScore(enemy.getPoints());
-		        System.out.println("link a attaqué");
-		        return true;
+			Rectangle linkRect = link.getBounds();
+		   	Rectangle enemyRect = enemy.getBounds();
+		    if (linkRect.intersects(enemyRect)) {
+		        if (link.getOrientation() == Orientation.NORTH && link.getY() - enemy.getY() <= link.getAttackRange()) {
+		            // damage the enemy and update the score
+		            enemy.takeDamage(link.getDamage());
+		            link.incrementScore(enemy.getPoints());
+		            System.out.println("link a attaqué");
+		            return true;
+		        } else if (link.getOrientation() == Orientation.SOUTH && enemy.getY() - link.getY() <= link.getAttackRange()) {
+		            enemy.takeDamage(link.getDamage());
+		            link.incrementScore(enemy.getPoints());
+		            System.out.println("link a attaqué");
+		            return true;
+		        } else if (link.getOrientation() == Orientation.WEST && link.getX() - enemy.getX() <= link.getAttackRange()) {
+		            enemy.takeDamage(link.getDamage());
+		            link.incrementScore(enemy.getPoints());
+		            System.out.println("link a attaqué");
+		            return true;
+		        } else if (link.getOrientation() == Orientation.EAST && enemy.getX() - link.getX() <= link.getAttackRange()) {
+		            enemy.takeDamage(link.getDamage());
+		            link.incrementScore(enemy.getPoints());
+		            System.out.println("link a attaqué");
+		            return true;
+		        }
 		    }
 		    return false;
 	    }
@@ -103,20 +107,7 @@ public class LinkCollisionManagerEnemy extends AdvanceCollisionGroup {
 
 }
 
-	public Enemy getLink() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	public Object getEnemyGroup() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public boolean isCollisionOccurred(Enemy enemy, Enemy link) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 	
 
 
