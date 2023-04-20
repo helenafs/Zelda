@@ -31,6 +31,7 @@ public class Link extends AnimatedSprite {
     public static final Orientation DEFAULT_ORIENTATION = Orientation.NORTH;
     
     private Game game;
+    private static SpriteGroup linksGroup;
     
     private Blade blade;
     private int damage; 
@@ -116,11 +117,19 @@ public class Link extends AnimatedSprite {
         this.setAnimationFrame(0, 0);
     }
     
+     
+    public SpriteGroup getSpriteGroup() {
+    	return linksGroup
+   
+    }
     public void setBoard(Board board) {
-        SpriteGroup link = new SpriteGroup("LINK SPRITE GROUPE");
-        link.add(this);
+        linksGroup.add(this);
         this.manager.setCollisionGroup(link, board.getForeground());
     }
+    
+    public void loselife() {
+    this.life = -1; 
+    System.out.println("Vous avez perdu une vie")
     
     
     //Set la classe shield 
