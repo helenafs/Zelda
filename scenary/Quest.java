@@ -2,12 +2,14 @@ package zelda.scenary;
 
 import java.awt.Graphics2D;
 
-import zelda.Link;
-import zelda.Zelda;
-import zelda.objects.Blade;
+import zelda.Link; // pour link 
+import zelda.Zelda; //le game
+import zelda.enemies.Enemy;//pour l'enemi sour la board
+import zelda.objects.Blade; // pour la blade
 
 import com.golden.gamedev.object.PlayField;
 import com.golden.gamedev.object.Sprite;
+import com.golden.gamedev.object.SpriteGroup;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -15,9 +17,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-//import java.util.HashMap;
-//import java.util.Map;
+
+
 import java.util.ArrayList;
+
 
 public class Quest extends PlayField {
     
@@ -27,6 +30,8 @@ public class Quest extends PlayField {
     
     private QuestMenu menu;
     private int currentX, currentY;
+    
+    private AbstractTile[][] floorTiles;
     
     
     //characteres 
@@ -39,14 +44,9 @@ public class Quest extends PlayField {
     public static final char B2 = 'S';
     public static final char B3 = 'A';
     public static final char B4 = 'N';
-  //  public static final char ENNEMI = 'E';
-  //  public static final char OBJET = 'O';
     
-    
-    
+
     ArrayList<Sprite>[][] objets;
-    
-    
     
     public Quest(Zelda game) {
         super();
@@ -59,30 +59,20 @@ public class Quest extends PlayField {
             }
         }
         this.initRessources();
+        this.floorTiles = new AbstractTile[2][2]; 
     }
     
-    public void changer(Link link) {
-		// TODO Auto-generated method stub
-		    
-		        Blade blade = link.getBlade();
-		        if (blade.getKind() == Blade.Kind.SILVER) {
-		            Sprite newSprite = new Blade(this.game, Blade.Kind.SILVER, 4);
-		            newSprite.setLocation(sprite.getX(), sprite.getY());
-		            objets[currentX][currentY].remove(sprite);
-		            objets[currentX][currentY].add(newSprite);
-		        }		    
-		}
+  
 
     private void initRessources() {
         this.menu = new QuestMenu(this.game);
-       
         
         //path vers les fichiers
         Path[] paths = {
-            Paths.get("E:\\M2 DCISS\\prog2\\zelda\\classes\\zelda\\res\\tableau\\premiertableauhautgauche.txt"),
-            Paths.get("E:\\M2 DCISS\\prog2\\zelda\\classes\\zelda\\res\\tableau\\deuxiemetableauhautdroite.txt"),
-            Paths.get("E:\\M2 DCISS\\prog2\\zelda\\classes\\zelda\\res\\tableau\\troisiemetableaubasgauche.txt"),
-            Paths.get("E:\\M2 DCISS\\prog2\\zelda\\classes\\zelda\\res\\tableau\\quatriemetableabasudroite.txt")
+            Paths.get("C:\\Users\\helen\\OneDrive\\Documentos\\MIASHS DCISS\\Zelda\\zelda\\zelda\\classes\\zelda\\res\\tableau\\premiertableauhautgauche.txt"),
+            Paths.get("C:\\Users\\helen\\OneDrive\\Documentos\\MIASHS DCISS\\Zelda\\zelda\\zelda\\classes\\zelda\\res\\tableau\\deuxiemetableauhautdroite.txt"),
+            Paths.get("C:\\Users\\helen\\OneDrive\\Documentos\\MIASHS DCISS\\Zelda\\zelda\\zelda\\classes\\zelda\\res\\tableau\\troisiemetableaubasgauche.txt"),
+            Paths.get("C:\\Users\\helen\\OneDrive\\Documentos\\MIASHS DCISS\\Zelda\\zelda\\zelda\\classes\\zelda\\res\\tableau\\quatriemetableabasudroite.txt")
         };
        
         //voir si les fichiers sont regulaires
@@ -107,12 +97,16 @@ public class Quest extends PlayField {
 	        this.add(b10);
 	        this.add(b01);
 	        this.add(b11);
+	        
+	        b10.setEnemyOnBoard(this.game.enemy, 370, 420);
+	   //     b00.setBladeOnBoard(this.game.b, 255, 379);
         
 	        int a = 0;
+	        
         //lire les fichiers
 	        for (Path path : paths) {
 	            Board b = boards[a%2][a/2];
-	            
+//  a++;
 	            BufferedReader br = null;
 	            try {
 	                br = new BufferedReader(new FileReader(path.toFile()));
@@ -124,8 +118,7 @@ public class Quest extends PlayField {
 	                    // Check if the current character matches any of the characters you are interested in
 	                    if (c == SOL) {
 	                        // Do something with the 'sol' character
-	                        b.add(new Floor(this.game, Floor.Color.SAND));
-	                        
+	                        b.add(new Floor(this.game, Floor.Color.SAND));   
 	                    } else if (c == OBSTACLE) {
 	                        // Do something with the 'obstacle' character
 	                        b.add(new Rock(this.game, Rock.Kind.GREEN_PLAIN));
@@ -138,8 +131,7 @@ public class Quest extends PlayField {
 	                    } else if (c == BORDURE_NORD) {
 	                        // Do something with the 'bordureNord' character
 	                        b.add(new Rock(this.game, Rock.Kind.GREEN_NORTH_EAST_CORNER));
-	                    } 
-	                    else if (c == Bl) {
+	                    }  else if (c == Bl) {
 	                        // Lire les blade
 	                    	AbstractTile current = new Floor(this.game, Floor.Color.SAND);
 	                    	b.add(current);
@@ -183,14 +175,46 @@ public class Quest extends PlayField {
 	                    }
 	                }
 	            }
+	            
 	            a++;
 	        }
 		         
+  
     }
     
+    public void changer(Link link, Sprite sprite) {
+
+    	// Get the current position of the blade
+        int bladeX = currentX;
+        int bladeY = currentY;
+
+        // Check if there's a blade at the current position
+        if (objets[bladeX][bladeY].stream().anyMatch(s -> s instanceof Blade)) {
+            // Remove the blade from the objets array
+            objets[bladeX][bladeY].removeIf(s -> s instanceof Blade);
+
+            // Replace the blade with a floor tile
+            AbstractTile floor = new Floor(this.game, Floor.Color.SAND);
+            floor.setLocation(bladeX, bladeY);
+            floorTiles[bladeX][bladeY] = floor; // Store the floor tile in the floorTiles array
+
+            // Create a new blade for Link
+            Blade newBlade = new zelda.objects.Blade(this.game, Blade.Kind.MAGICAL, 4);
+            link.takeBlade(newBlade);
+
+            System.out.println("Vous avez pris la blade");
+        } else {
+            System.out.println("Aucune blade trouvée à la position actuelle");
+        }
+   }
     
     public Board getCurrentBoard() {
+    	 System.out.println("Current board: " + this.boards[this.currentY][this.currentX]); // Add this line
     	return this.boards[getCurrentX()][getCurrentY()];
+    }
+    
+    public Board getBoard(int x, int y) {
+        return this.boards[x][y];
     }
     
     public void add(Board board) {
@@ -203,21 +227,27 @@ public class Quest extends PlayField {
         super.update(elapsedTime);
         this.boards[getCurrentX()][getCurrentY()].update(elapsedTime);
         this.menu.update(elapsedTime);
-        for(Sprite sp :this.objets[getCurrentX()][getCurrentY()] )
-        	sp.update(elapsedTime);
+        
+        for(Sprite sp :this.objets[getCurrentX()][getCurrentY()] ) {
+        	sp.update(elapsedTime);}
+       
     }
     
     public void render(Graphics2D g) {
         super.render(g);
         this.boards[getCurrentX()][getCurrentY()].render(g);       
         this.menu.render(g);
-        for (Sprite sp : this.objets[getCurrentX()][getCurrentY()]) {
-            if(objets[getCurrentX()][getCurrentY()] != null) {
-                sp.render(g);
-            }
+        
+     // Draw floor tile if available
+        if (floorTiles[getCurrentX()][getCurrentY()] != null) {
+            floorTiles[getCurrentX()][getCurrentY()].render(g);
         }
-    }
 
+        for (Sprite sp : this.objets[getCurrentX()][getCurrentY()]) {
+            sp.render(g);
+        }
+    
+    }
 
 	public int getCurrentX() {
 		return currentX;

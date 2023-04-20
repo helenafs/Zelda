@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import zelda.Zelda;
+import zelda.enemies.Direction;
+import zelda.enemies.Enemy;
+import zelda.objects.Blade;
+import zelda.objects.Blade.Kind;
 
 import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.SpriteGroup;
@@ -26,6 +30,11 @@ public class Board {
     private int size;
     
     private boolean display;
+    
+    private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+    
+    private ArrayList<Blade> blades = new ArrayList<Blade>();
+
     
     public Board(Zelda game, int x, int y) {
         this.game = game;
@@ -110,6 +119,21 @@ public class Board {
         return background;
     }
     
+    public void setEnemyOnBoard(Enemy enemy, int x, int y) {
+    	enemy = new Enemy(game, x, y,10,4);    	
+        enemy.setLocation(x, y);
+        enemy.walk(Direction.UP);
+        enemies.add(enemy);
+        enemy.setBoard(this);
+
+    }
+    
+    public void setBladeOnBoard(Blade blade, int x, int y) {
+    	blade = new Blade(game, Kind.WOOD, 4);
+    	blade.setLocation(x, y);
+    	blades.add(blade); 
+    	blade.setBoard(this);
+    }
     public void update(long elapsedTime) {
         for (int i = 0; i < Board.WIDTH; i++) {
             for (int j = 0; j < Board.HEIGHT; j++) {
@@ -117,6 +141,14 @@ public class Board {
                     tiles[i][j].update(elapsedTime);
                 }
             }
+        }
+        
+        for (Enemy enemy : enemies) {
+        	enemy.update(elapsedTime);
+        }
+        
+        for (Blade blade : blades) {
+        	blade.update(elapsedTime);
         }
     }
 
@@ -128,5 +160,24 @@ public class Board {
                 }
             }
         }
+       
+      
+        for (Enemy enemy : enemies) {
+        	if(enemy.isActive() && enemy.isAlive()) {
+        	enemy.render(g);
+        }   
+       }    
+        
+        for (Blade blade : blades) {
+        	blade.render(g);
+        }
+        
+        
+        
     }
+    
+    
+    
+    
+    
 }
