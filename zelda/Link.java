@@ -15,6 +15,8 @@ import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.SpriteGroup;
 import com.golden.gamedev.object.Timer;
 import com.golden.gamedev.object.collision.AdvanceCollisionGroup;
+import com.golden.gamedev.object.collision.CollisionBounds;
+;
 
 public class Link extends AnimatedSprite {
     
@@ -31,6 +33,7 @@ public class Link extends AnimatedSprite {
     private Game game;
     
     private Blade blade;
+    private int damage; 
     
     private Shield.Kind shield;
     
@@ -52,6 +55,7 @@ public class Link extends AnimatedSprite {
         this.manager = new LinkCollisionManager();
         this.initResources();
         blade = new Blade(this.game, Blade.Kind.WOOD,4);
+        
     }
     
     private void initResources() {
@@ -116,6 +120,7 @@ public class Link extends AnimatedSprite {
         link.add(this);
         this.manager.setCollisionGroup(link, board.getForeground());
     }
+    
     
     //Set la classe shield 
     public void setShield(Shield.Kind kind) {
@@ -273,36 +278,73 @@ public class Link extends AnimatedSprite {
         }
     }
     
+    public void takeBlade(Blade blade) {
+    	this.blade= blade;
+        updateBladeProperties();
+    }
+    
+    private void updateBladeProperties() {
+        if (this.blade != null) {
+            // Update the Link's damage based on the blade's damage
+            this.setDamage(blade.getDamage());
 
-    private class LinkCollisionManager extends AdvanceCollisionGroup {
-        public LinkCollisionManager() {
-            this.pixelPerfectCollision = false;
-        }
-        
-        public void collided(Sprite s1, Sprite s2) {
-            
-     
-        
-            this.revertPosition1();
         }
     }
+    
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+    
+    
+    public int getLife() {
+        return life;
+    }
 
-	public void takeDamage(int damage) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void setLife(int life) {
+        this.life = life;
+    }
+
+
+    public void takeDamage(int damage) {
+        life -= damage;
+        
+        // Optionally, play a damage taken animation or sound effect here
+    }
+
 
 	public int getDamage() {
 		// TODO Auto-generated method stub
 		return blade.getDamage();
+	}
+	
+	public void stop() {
+	    setSpeed(0, 0);
+	    setAnimate(false);
+	}
+
+	public boolean isAlive() {
+	    return life > 0;
 	}
 
 	public Orientation getOrientation() {
 		// TODO Auto-generated method stub
 		return orientation; 
 	}
-     public Blade getBlade() {
+	
+	public Blade getBlade() {
 		return blade;
 	}
+	
+	 private class LinkCollisionManager extends AdvanceCollisionGroup {
+	        public LinkCollisionManager() {
+	            this.pixelPerfectCollision = false;
+	        }
+	        
+	        public void collided(Sprite s1, Sprite s2) {
+	            this.revertPosition1();
+	        }
+	    }
+
+	
 }
     

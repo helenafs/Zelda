@@ -7,6 +7,7 @@ import com.golden.gamedev.Game;
 import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.SpriteGroup;
 import com.golden.gamedev.object.collision.AdvanceCollisionGroup;
+import com.golden.gamedev.object.collision.CollisionBounds;
 
 import zelda.enemies.Direction;
 import zelda.enemies.Enemy;
@@ -15,20 +16,31 @@ import zelda.objects.Shield;
 
 public class LinkCollisionManagerEnemy extends AdvanceCollisionGroup {
 	private SpriteGroup enemyGroup;
-	private Game game;
+    private Game game;
 
-		public LinkCollisionManagerEnemy(SpriteGroup enemyGroup, Link link) {
-			this.enemyGroup = enemyGroup;
-			pixelPerfectCollision = true;
-			SpriteGroup linkSprites = new SpriteGroup("LINK SPRITE GROUPE");
-	        linkSprites.add(link);
-			this.setCollisionGroup(enemyGroup, linkSprites);
-		}
+    public LinkCollisionManagerEnemy(SpriteGroup enemyGroup, SpriteGroup link) {
+        this.enemyGroup = enemyGroup;
+        pixelPerfectCollision = true;
+        this.setCollisionGroup(enemyGroup, link);
+    }
 
 		
-		public boolean linkattacked(Link s1, Enemy s2) {
-			return false; 
+		public boolean linkattacked(Link link, Enemy enemy) {
+			
+			Orientation linkOrientation = link.getOrientation(); 
+			switch (linkOrientation)
+			if (link.getY() <= enemy.getY() &&
+					
+		
+					.debut.getLigne() <= n.fin.getLigne() && n.debut.getLigne() <= this.fin.getLigne()
+					&& this.debut.getColonne() <= n.fin.getColonne() && n.debut.getColonne() <= this.fin.getColonne()) {
+				return true;
+			}
+			return false;
+
+		
 		}
+
 		
 		@Override
 		public void collided(Sprite s1, Sprite s2) {
@@ -66,7 +78,18 @@ public class LinkCollisionManagerEnemy extends AdvanceCollisionGroup {
 	public boolean isCollisionOccurred(Enemy enemy, Enemy link) {
 		// TODO Auto-generated method stub
 		return false;
-	}}
+	}
+	
+
+
+
+
+
+
+
+
+
+}
 
 
 
