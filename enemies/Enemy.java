@@ -263,6 +263,10 @@ public class Enemy extends AnimatedSprite{
         direction = Direction.values()[directionIndex];
         this.walk(direction);
     }
+	
+	public Rectangle getBounds() {
+        return new Rectangle((int) getX(), (int) getY(), getWidth(), getHeight());
+    }
     
 	
 	private class EnemyCollisionManager extends AdvanceCollisionGroup {
