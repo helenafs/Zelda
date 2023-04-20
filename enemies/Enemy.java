@@ -259,6 +259,13 @@ public class Enemy extends AnimatedSprite{
         this.walk(direction);
     }
     
+    public void lifedecrease() {
+		this.life = this.life - 1;
+		if(this.life == 0) {
+			this.setActive(false);// desactive le collision manager
+			System.out.println("Un ennemi a été abbatue.");
+		}
+	}
 	
 	private class EnemyCollisionManager extends AdvanceCollisionGroup {
 
