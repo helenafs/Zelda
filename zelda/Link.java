@@ -316,9 +316,9 @@ public class Link extends AnimatedSprite {
 
 
     public void takeDamage(int damage) {
-        life -= damage;
-        
-        // Optionally, play a damage taken animation or sound effect here
+  	 life -= damage;
+        System.out.println("Ouch");
+        this.game.playSound("res/sounds/LOZ_Hurt.wav"); 
     }
 
 
