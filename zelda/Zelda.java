@@ -10,6 +10,7 @@ import zelda.scenary.Quest;
 import zelda.scenary.Rock;
 import zelda.enemies.Direction;
 import zelda.enemies.Enemy;
+import zelda.enemies.Enemy.BoardCollisionManager;
 import zelda.objects.Blade;
 import zelda.objects.LinkCollisionManagerBlade;
 import zelda.objects.Shield;
@@ -45,8 +46,6 @@ public class Zelda extends Game {
     private SpriteGroup enemiesGroup;
     private LinkCollisionManagerEnemy linkEnemyCollision;
 
-    
-    
     public Zelda() {
         
     }
@@ -55,16 +54,16 @@ public class Zelda extends Game {
     	 
         this.quest = new Quest(this);
    
-        createEnemy();
+        //createEnemy();
         this.link = new Link(this);
         this.link.setBoard(this.quest.getCurrentBoard());    
         this.menu = false;
-        b = new Blade(this,Blade.Kind.WOOD,4); 
+        //  b = new Blade(this,Blade.Kind.WOOD,4); 
         
         // Initialize the objectsGroup and add objects (e.g., trees) to it
-        objectsGroup = new SpriteGroup("Objects");
+        //objectsGroup = new SpriteGroup("Objects");
         // Add objects to the group
-        objectsGroup.add(b);
+       // objectsGroup.add(b);
        // objectsGroup.add(shield);
         
         // Initialize the enemiesGroup and add some enemies to it
@@ -75,14 +74,15 @@ public class Zelda extends Game {
         }
 
         linkEnemyCollision = new LinkCollisionManagerEnemy(this, enemiesGroup, link);
-    }
-    
-    private void createEnemy() {
-    	this.enemy = new Enemy(this, 370, 420, 10, 4);
-    	this.enemy.walk(Direction.UP);
-    	this.enemy.setObjectsGroup(objectsGroup);
 
     }
+    
+//    private void createEnemy() {
+//    	this.enemy = new Enemy(this, 370, 420, 10, 4);
+//    	this.enemy.walk(Direction.UP);
+//    	this.enemy.setObjectsGroup(objectsGroup);
+//
+//    }
         
     public void update(long elapsedTime) {
        
@@ -137,9 +137,7 @@ public class Zelda extends Game {
         this.quest.update(elapsedTime);
         this.link.update(elapsedTime);
         enemiesGroup.update(elapsedTime);
-
-        this.b.update(elapsedTime);
-   
+       // enemy.update(elapsedTime);
         linkEnemyCollision.update(elapsedTime);
 
     }
@@ -149,9 +147,10 @@ public class Zelda extends Game {
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         this.quest.render(g);
         this.link.render(g);
-        this.b.render(g);
-        objectsGroup.render(g);
-        enemiesGroup.render(g);      
+     
+        //objectsGroup.render(g);
+        enemiesGroup.render(g);  
+  
     }
     
     //pour utiliser dans l'attaque de l'enemi
