@@ -31,10 +31,11 @@ public class Link extends AnimatedSprite {
     public static final Orientation DEFAULT_ORIENTATION = Orientation.NORTH;
     
     private Game game;
-    private static SpriteGroup linksGroup;
     
     private Blade blade;
     private int damage; 
+    private int attackRange;
+    private int score;
     
     private Shield.Kind shield;
     
@@ -46,17 +47,23 @@ public class Link extends AnimatedSprite {
     
     private CollisionManager manager;
     
+    protected SpriteGroup link_SGroup;
+    
     public Link(Game game) {
+    	life = 100; 
         this.game = game;
         this.shield = Link.DEFAULT_SHIELD;
         this.orientation = Link.DEFAULT_ORIENTATION;
         this.getAnimationTimer().setDelay(Link.ANIMATION_DELAY);
         this.figth = new Timer(Link.FIGHT_TIMER);
         this.figth.setActive(false);
-	this.life = 5;
         this.manager = new LinkCollisionManager();
         this.initResources();
         blade = new Blade(this.game, Blade.Kind.WOOD,4);
+        this.attackRange = 30; // example attack range value
+        this.score = 0;
+        
+        link_SGroup = new SpriteGroup("LINK SPRITE GROUP"); 
         
     }
     
@@ -117,19 +124,19 @@ public class Link extends AnimatedSprite {
         this.setAnimationFrame(0, 0);
     }
     
-     
-    public SpriteGroup getSpriteGroup() {
-    	return linksGroup
-   
-    }
     public void setBoard(Board board) {
-        linksGroup.add(this);
+        SpriteGroup link = new SpriteGroup("LINK SPRITE GROUPE");
+        link.add(this);
         this.manager.setCollisionGroup(link, board.getForeground());
     }
     
-    public void loselife() {
-    this.life = -1; 
-    System.out.println("Vous avez perdu une vie")
+    public int getAttackRange() {
+        return attackRange;
+    }
+
+    public void incrementScore(int points) {
+        score += points;
+    }
     
     
     //Set la classe shield 
@@ -316,9 +323,10 @@ public class Link extends AnimatedSprite {
 
 
     public void takeDamage(int damage) {
-  	 life -= damage;
+        life -= damage;
         System.out.println("Ouch");
         this.game.playSound("res/sounds/LOZ_Hurt.wav"); 
+        // Optionally, play a damage taken animation or sound effect here
     }
 
 
@@ -344,10 +352,6 @@ public class Link extends AnimatedSprite {
 	public Blade getBlade() {
 		return blade;
 	}
-	
-	public int getLifePoints() {
-    	return this.life;
-    }
 	
 	 private class LinkCollisionManager extends AdvanceCollisionGroup {
 	        public LinkCollisionManager() {

@@ -21,7 +21,7 @@ import com.golden.gamedev.object.SpriteGroup;
 import com.golden.gamedev.Game;
 import com.golden.gamedev.GameLoader;
 
-
+import zelda.LinkCollisionManagerEnemy;
 
 public class Zelda extends Game {
 	
@@ -42,8 +42,10 @@ public class Zelda extends Game {
     public  Blade b; 
     public Shield shield; 
     
-    private SpriteGroup[][] objets;  // Add this line to define the objets variable
+    private SpriteGroup enemiesGroup;
+    private LinkCollisionManagerEnemy linkEnemyCollision;
 
+    
     
     public Zelda() {
         
@@ -52,13 +54,8 @@ public class Zelda extends Game {
     public void initResources() {
     	 
         this.quest = new Quest(this);
-        objets = new SpriteGroup[2][2]; // Initialize the objets array with some size
-        for (int i = 0; i < objets.length; i++) {
-            for (int j = 0; j < objets[i].length; j++) {
-                objets[i][j] = new SpriteGroup("Objects at (" + i + ", " + j + ")");
-            }
-        }
-    //    createEnemy();
+   
+        createEnemy();
         this.link = new Link(this);
         this.link.setBoard(this.quest.getCurrentBoard());    
         this.menu = false;
@@ -69,15 +66,23 @@ public class Zelda extends Game {
         // Add objects to the group
         objectsGroup.add(b);
        // objectsGroup.add(shield);
-  
+        
+        // Initialize the enemiesGroup and add some enemies to it
+        enemiesGroup = new SpriteGroup("Enemies");
+        // Get the enemies from the current board and add them to the group
+        for (Enemy enemy : quest.getCurrentBoard().getEnemies()) {
+            enemiesGroup.add(enemy);
+        }
+
+        linkEnemyCollision = new LinkCollisionManagerEnemy(this, enemiesGroup, link);
     }
     
-//    private void createEnemy() {
-//    	this.enemy = new Enemy(this, 370, 420, 10, 4);
-//    	this.enemy.walk(Direction.UP);
-//    	this.enemy.setObjectsGroup(objectsGroup);
-//
-//    }
+    private void createEnemy() {
+    	this.enemy = new Enemy(this, 370, 420, 10, 4);
+    	this.enemy.walk(Direction.UP);
+    	this.enemy.setObjectsGroup(objectsGroup);
+
+    }
         
     public void update(long elapsedTime) {
        
@@ -131,14 +136,11 @@ public class Zelda extends Game {
         
         this.quest.update(elapsedTime);
         this.link.update(elapsedTime);
-       
-        //b.setLocation(255, 379);
+        enemiesGroup.update(elapsedTime);
+
         this.b.update(elapsedTime);
-       
-        // Update the Link object
-        link.update(elapsedTime);
-        
-    //    this.enemy.update(elapsedTime);
+   
+        linkEnemyCollision.update(elapsedTime);
 
     }
 
@@ -149,13 +151,7 @@ public class Zelda extends Game {
         this.link.render(g);
         this.b.render(g);
         objectsGroup.render(g);
- 
-        //mettre l'enemi juste si il est active 
-       // if(this.enemy.isActive() && this.enemy.isAlive()) {
-         //  this.enemy.render(g);
-            
-       // }
-           
+        enemiesGroup.render(g);      
     }
     
     //pour utiliser dans l'attaque de l'enemi
