@@ -1,13 +1,14 @@
 package zelda.enemies;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import zelda.Zelda;
 
-public class GhostEnemy extends Enemy{
+public class GhostEnemy extends AbstractEnemy{
 
 	public GhostEnemy(Zelda game, int startX, int startY, int startHealth, int startDamage) {
-		super(game, startX, startY, startHealth, startDamage);
+		super();
 	}
 
 	/**
@@ -25,4 +26,10 @@ public class GhostEnemy extends Enemy{
 	        this.setImages(sprites);
 	        this.setAnimationFrame(0, 0);
 	    }
+
+	@Override
+	public void render(Graphics2D g) {
+		// TODO Auto-generated method stub
+		
+	}
 }
